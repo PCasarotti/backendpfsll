@@ -5,15 +5,16 @@ export default class VeiculoCtrl {
     gravar(requisicao, resposta) {
         resposta.type('application/json');
         if (requisicao.method === 'POST' && requisicao.is('application/json')) {
+            const dados = requisicao.body;
             const modelo = dados.modelo;
-        const ano = dados.ano;
-        const km = dados.km;
-        const valor = dados.valor;
-        const cor = dados.cor;
+            const ano = dados.ano;
+            const km = dados.km;
+            const valor = dados.valor;
+            const cor = dados.cor;
 
-        if (descricao && precoCusto > 0 && precoVenda > 0 && dataValidade && qtdEstoque >= 0 && modelo && ano && km >= 0 && valor >= 0 && cor) {
-            const veiculo = new Veiculo(0, descricao, precoCusto, precoVenda, dataValidade, qtdEstoque, modelo, ano, km, valor, cor);
-            
+            if (modelo && ano && km >= 0 && valor >= 0 && cor) {
+                const veiculo = new Veiculo(0, "", modelo, ano, km, valor, cor);
+
                 veiculo.gravar().then(() => {
                     resposta.status(200).json({
                         "status": true,

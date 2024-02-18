@@ -17,5 +17,5 @@ CREATE TABLE veiculo (
     vei_cor VARCHAR(50) NOT NULL,
     mar_codigo INT NOT NULL,
     CONSTRAINT pk_veiculo PRIMARY KEY (vei_codigo),
-    FOREIGN KEY (mar_codigo) REFERENCES marca(mar_codigo)
+    CONSTRAINT fk_marca FOREIGN KEY (mar_codigo) REFERENCES marca(mar_codigo)
 );

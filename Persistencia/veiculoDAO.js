@@ -5,11 +5,9 @@ export default class VeiculoDAO {
 
     async gravar(veiculo) {
         if (veiculo instanceof Veiculo) {
-            const sql = `INSERT INTO veiculo(vei_descricao, vei_precoCusto,
-                vei_precoVenda, vei_dataValidade, vei_qtdEstoque)
-                VALUES(?,?,?,?,?)`;
-            const parametros = [veiculo.descricao, veiculo.precoCusto, veiculo.precoVenda,
-            veiculo.dataValidade, veiculo.qtdEstoque];
+            const sql = `INSERT INTO veiculo(vei_descricao, vei_modelo, vei_ano, vei_km, vei_valor, vei_cor)
+                VALUES(?,?,?,?,?,?)`;
+            const parametros = [veiculo.descricao, veiculo.modelo, veiculo.ano, veiculo.km, veiculo.valor, veiculo.cor];
 
             const conexao = await conectar();
             const retorno = await conexao.execute(sql, parametros);
@@ -20,11 +18,10 @@ export default class VeiculoDAO {
 
     async atualizar(veiculo) {
         if (veiculo instanceof Veiculo) {
-            const sql = `UPDATE veiculo SET vei_descricao = ?, vei_precoCusto = ?,
-            vei_precoVenda = ?, vei_dataValidade = ?, vei_qtdEstoque = ?
+            const sql = `UPDATE veiculo SET vei_descricao = ?, vei_modelo = ?,
+            vei_ano = ?, vei_km = ?, vei_valor = ?, vei_cor = ?
             WHERE vei_codigo = ?`;
-            const parametros = [veiculo.descricao, veiculo.precoCusto, veiculo.precoVenda,
-            veiculo.dataValidade, veiculo.qtdEstoque, veiculo.codigo];
+            const parametros = [veiculo.descricao, veiculo.modelo, veiculo.ano, veiculo.km, veiculo.valor, veiculo.cor, veiculo.codigo];
 
             const conexao = await conectar();
             await conexao.execute(sql, parametros);
@@ -43,48 +40,43 @@ export default class VeiculoDAO {
     }
 
     async consultar(termo) {
-        if (!termo){
-            termo="";
+        if (!termo) {
+            termo = "";
         }
         //termo é um número
         const conexao = await conectar();
         let listaVeiculos = [];
-        if (!isNaN(parseInt(termo))){
+        if (!isNaN(parseInt(termo))) {
             //consulta pelo código do veiculo
-            const sql = `SELECT v.vei_codigo, v.vei_descricao,
-              v.vei_precoCusto, v.vei_precoVenda, v.vei_dataValidade, 
-              v.vei_qtdEstoque
+            const sql = `SELECT v.vei_codigo, v.vei_descricao, v.vei_modelo, v.vei_ano, v.vei_km, v.vei_valor, v.vei_cor
               FROM veiculo v 
               WHERE v.vei_codigo = ?
               ORDER BY v.vei_descricao               
             `;
-            const parametros=[termo];
-            const [registros, campos] = await conexao.execute(sql,parametros);
-            for (const registro of registros){
-                const veiculo = new Veiculo(registro.vei_codigo,registro.vei_descricao,
-                                            registro.vei_precoCusto,registro.vei_precoVenda,
-                                            registro.vei_dataValidade, registro.vei_qtdEstoque
-                                            );
+            const parametros = [termo];
+            const [registros, campos] = await conexao.execute(sql, parametros);
+            for (const registro of registros) {
+                const veiculo = new Veiculo(registro.vei_codigo, registro.vei_descricao,
+                    registro.vei_modelo, registro.vei_ano,
+                    registro.vei_km, registro.vei_valor, registro.vei_cor
+                );
                 listaVeiculos.push(veiculo);
             }
         }
-        else
-        {
+        else {
             //consulta pela descrição do veiculo
-            const sql = `SELECT v.vei_codigo, v.vei_descricao,
-              v.vei_precoCusto, v.vei_precoVenda, v.vei_dataValidade, 
-              v.vei_qtdEstoque
+            const sql = `SELECT v.vei_codigo, v.vei_descricao, v.vei_modelo, v.vei_ano, v.vei_km, v.vei_valor, v.vei_cor
               FROM veiculo v 
               WHERE v.vei_descricao like ?
               ORDER BY v.vei_descricao               
             `;
-            const parametros=['%'+termo+'%'];
-            const [registros, campos] = await conexao.execute(sql,parametros);
-            for (const registro of registros){
-                const veiculo = new Veiculo(registro.vei_codigo,registro.vei_descricao,
-                                            registro.vei_precoCusto,registro.vei_precoVenda,
-                                            registro.vei_dataValidade, registro.vei_qtdEstoque,
-                                            );
+            const parametros = ['%' + termo + '%'];
+            const [registros, campos] = await conexao.execute(sql, parametros);
+            for (const registro of registros) {
+                const veiculo = new Veiculo(registro.vei_codigo, registro.vei_descricao,
+                    registro.vei_modelo, registro.vei_ano,
+                    registro.vei_km, registro.vei_valor, registro.vei_cor,
+                );
                 listaVeiculos.push(veiculo);
             }
         }

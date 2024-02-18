@@ -8,8 +8,9 @@ export default class Veiculo {
     #km;
     #valor;
     #cor;
+    #marca;
 
-    constructor(codigo = 0, descricao = "", modelo = "", ano = 0, km = 0, valor = 0, cor = "") {
+    constructor(codigo = 0, descricao = "", modelo = "", ano = 0, km = 0, valor = 0, cor = "", marca={}) {
         this.#codigo = codigo;
         this.#descricao = descricao;
         this.#modelo = modelo;
@@ -17,6 +18,7 @@ export default class Veiculo {
         this.#km = km;
         this.#valor = valor;
         this.#cor = cor;
+        this.#marca = marca;
     }
 
     get codigo() {
@@ -73,6 +75,13 @@ export default class Veiculo {
     set cor(novaCor) {
         this.#cor = novaCor;
     }
+    get marca() {
+        return this.#marca;
+    }
+
+    set marca(novaMarca) {
+        this.#marca = novaMarca;
+    }
 
     toJSON() {
         return {
@@ -83,6 +92,7 @@ export default class Veiculo {
             km: this.#km,
             valor: this.#valor,
             cor: this.#cor,
+            marca:this.#marca,
         }
     }
     async gravar() {

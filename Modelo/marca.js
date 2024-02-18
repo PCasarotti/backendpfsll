@@ -1,7 +1,6 @@
 import MarcaDAO from "../Persistencia/marcaDAO.js";
 
 export default class Marca {
-    //definição dos atributos privados
     #codigo;
     #descricao;
 
@@ -10,8 +9,7 @@ export default class Marca {
         this.#descricao = descricao;
     }
 
-    //métodos de acesso públicos
-
+    
     get codigo() {
         return this.#codigo;
     }
