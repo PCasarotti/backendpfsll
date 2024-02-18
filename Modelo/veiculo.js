@@ -3,18 +3,20 @@ import VeiculoDAO from "../Persistencia/veiculoDAO.js";
 export default class Veiculo {
     #codigo;
     #descricao;
-    #precoCusto;
-    #precoVenda;
-    #dataValidade;
-    #qtdEstoque;
+    #modelo;
+    #ano;
+    #km;
+    #valor;
+    #cor;
 
-    constructor(codigo = 0, descricao = "", precoCusto = 0, precoVenda = 0, dataValidade = '', qtdEstoque = 0) {
+    constructor(codigo = 0, descricao = "", modelo = "", ano = 0, km = 0, valor = 0, cor = "") {
         this.#codigo = codigo;
         this.#descricao = descricao;
-        this.#precoCusto = precoCusto;
-        this.#precoVenda = precoVenda;
-        this.#dataValidade = dataValidade;
-        this.#qtdEstoque = qtdEstoque;
+        this.#modelo = modelo;
+        this.#ano = ano;
+        this.#km = km;
+        this.#valor = valor;
+        this.#cor = cor;
     }
 
     get codigo() {
@@ -32,50 +34,57 @@ export default class Veiculo {
         this.#descricao = novaDesc;
     }
 
-    get precoCusto() {
-        return this.#precoCusto;
+    get modelo() {
+        return this.#modelo;
     }
 
-    set precoCusto(novoPreco) {
-        this.#precoCusto = novoPreco;
+    set modelo(novoModelo) {
+        this.#modelo = novoModelo;
     }
 
-    get precoVenda() {
-        return this.#precoVenda;
+    get ano() {
+        return this.#ano;
     }
 
-    set precoVenda(novoPreco) {
-        this.#precoVenda = novoPreco;
+    set ano(novoAno) {
+        this.#ano = novoAno;
     }
 
-    get dataValidade() {
-        return this.#dataValidade;
+    get km() {
+        return this.#km;
     }
 
-    set dataValidade(novaData) {
-        this.#dataValidade = novaData;
+    set km(novoKm) {
+        this.#km = novoKm;
     }
 
-    get qtdEstoque() {
-        return this.#qtdEstoque;
+    get valor() {
+        return this.#valor;
     }
 
-    set qtdEstoque(novaQtd) {
-        this.#qtdEstoque = novaQtd;
+    set valor(novoValor) {
+        this.#valor = novoValor;
+    }
+
+    get cor() {
+        return this.#cor;
+    }
+
+    set cor(novaCor) {
+        this.#cor = novaCor;
     }
 
     toJSON() {
         return {
             codigo: this.#codigo,
             descricao: this.#descricao,
-            precoCusto: this.#precoCusto,
-            precoVenda: this.#precoVenda,
-            dataValidade: this.#dataValidade,
-            qtdEstoque: this.#qtdEstoque,
+            modelo: this.#modelo,
+            ano: this.#ano,
+            km: this.#km,
+            valor: this.#valor,
+            cor: this.#cor,
         }
     }
-
-    //camada de modelo acessa a camada de persistencia
     async gravar() {
         const veiculoDAO = new VeiculoDAO();
         await veiculoDAO.gravar(this);
