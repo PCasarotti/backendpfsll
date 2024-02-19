@@ -2,7 +2,6 @@ import VeiculoDAO from "../Persistencia/veiculoDAO.js";
 
 export default class Veiculo {
     #codigo;
-    #descricao;
     #modelo;
     #ano;
     #km;
@@ -10,9 +9,8 @@ export default class Veiculo {
     #cor;
     #marca;
 
-    constructor(codigo = 0, descricao = "", modelo = "", ano = 0, km = 0, valor = 0, cor = "", marca={}) {
+    constructor(codigo = 0, modelo = "", ano = 0, km = 0, valor = 0, cor = "", marca={}) {
         this.#codigo = codigo;
-        this.#descricao = descricao;
         this.#modelo = modelo;
         this.#ano = ano;
         this.#km = km;
@@ -27,15 +25,6 @@ export default class Veiculo {
     set codigo(novoCodigo) {
         this.#codigo = novoCodigo;
     }
-
-    get descricao() {
-        return this.#descricao;
-    }
-
-    set descricao(novaDesc) {
-        this.#descricao = novaDesc;
-    }
-
     get modelo() {
         return this.#modelo;
     }
@@ -86,7 +75,6 @@ export default class Veiculo {
     toJSON() {
         return {
             codigo: this.#codigo,
-            descricao: this.#descricao,
             modelo: this.#modelo,
             ano: this.#ano,
             km: this.#km,

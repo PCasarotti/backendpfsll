@@ -11,9 +11,10 @@ export default class VeiculoCtrl {
             const km = dados.km;
             const valor = dados.valor;
             const cor = dados.cor;
+            const marca = dados.marca;
 
-            if (modelo && ano && km >= 0 && valor >= 0 && cor) {
-                const veiculo = new Veiculo(0, "", modelo, ano, km, valor, cor);
+            if (modelo && ano && km >= 0 && valor >= 0 && cor && marca){
+                const veiculo = new Veiculo(0, "", modelo, ano, km, valor, cor, marca);
 
                 veiculo.gravar().then(() => {
                     resposta.status(200).json({
@@ -49,15 +50,16 @@ export default class VeiculoCtrl {
         if ((requisicao.method === 'PUT' || requisicao.method === 'PATCH') && requisicao.is('application/json')) {
             const dados = requisicao.body;
             const codigo = dados.codigo;
-            const descricao = dados.descricao;
-            const precoCusto = dados.precoCusto;
-            const precoVenda = dados.precoVenda;
-            const dataValidade = dados.dataValidade;
-            const qtdEstoque = dados.qtdEstoque;
-            if (codigo && descricao && precoCusto > 0 && precoVenda > 0 && dataValidade
-                && qtdEstoque >= 0) {
-                const veiculo = new Veiculo(codigo, descricao, precoCusto,
-                    precoVenda, dataValidade, qtdEstoque);
+            const modelo = dados.modelo;
+            const ano = dados.ano;
+            const km = dados.km;
+            const valor = dados.valor;
+            const cor = dados.cor;
+            const marca = dados.marca;
+
+            if (codigo && modelo && ano && km >= 0 && valor >= 0 && cor && marca){
+                const veiculo = new Veiculo(codigo, modelo, ano, km, valor, cor, marca);
+                
                 //resolver a promise
                 veiculo.atualizar().then(() => {
                     resposta.status(200).json({
