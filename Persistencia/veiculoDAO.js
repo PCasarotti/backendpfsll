@@ -8,8 +8,12 @@ export default class VeiculoDAO {
         if (veiculo instanceof Veiculo) {
             const sql = `INSERT INTO veiculo(vei_modelo, vei_ano, vei_km, vei_valor, vei_cor, mar_codigo)
                 VALUES(?,?,?,?,?,?)`;
-            const parametros = [veiculo.modelo, veiculo.ano, 
-                veiculo.km, veiculo.valor, veiculo.cor, veiculo.marca.codigo];
+            const parametros = [veiculo.modelo, 
+                veiculo.ano, 
+                veiculo.km, 
+                veiculo.valor,
+                veiculo.cor, 
+                veiculo.marca.codigo];
 
             const conexao = await conectar();
             const retorno = await conexao.execute(sql, parametros);
@@ -20,12 +24,18 @@ export default class VeiculoDAO {
 
     async atualizar(veiculo) {
         if (veiculo instanceof Veiculo) {
-            const sql = `UPDATE veiculo SET vei_modelo = ?,
-            vei_ano = ?, vei_km = ?, vei_valor = ?, vei_cor = ?, mar_codigo = ?
-            WHERE vei_codigo = ?`;
+            const sql = 
+            `UPDATE veiculo 
+            SET vei_modelo = ?,
+            vei_ano = ?, 
+            vei_km = ?, 
+            vei_valor = ?, 
+            vei_cor = ?, 
+            mar_codigo = ?
+            WHERE vei_codigo = ?
+            `;
             const parametros = [veiculo.modelo, veiculo.ano, 
-                veiculo.km, veiculo.valor, veiculo.cor, veiculo.marca.codigo, veiculo.codigo];
-
+            veiculo.km, veiculo.valor, veiculo.cor, veiculo.marca.codigo, veiculo.codigo];
             const conexao = await conectar();
             await conexao.execute(sql, parametros);
             global.poolConexoes.releaseConnection(conexao);
@@ -48,16 +58,19 @@ export default class VeiculoDAO {
         }
         const conexao = await conectar();
         let listaVeiculos = [];
+    
         if (!isNaN(parseInt(termo))) {
-            const sql = `SELECT v.vei_codigo, v.vei_modelo, v.vei_ano, 
-            v.vei_km, v.vei_valor, v.vei_cor, m.mar_codigo, m.mar_descricao
-              FROM veiculo v 
-              INNER JOIN marca m ON v.mar_codigo = m.mar_codigo
-              WHERE v.vei_codigo = ?
-              ORDER BY v.vei_modelo              
+            // Consulta por código
+            const sql = `SELECT v.vei_codigo, v.vei_modelo, v.vei_ano,
+                v.vei_km, v.vei_valor, v.vei_cor, m.mar_codigo, m.mar_descricao
+                FROM veiculo v 
+                INNER JOIN marca m ON v.mar_codigo = m.mar_codigo
+                WHERE v.vei_codigo = ?
+                ORDER BY v.vei_modelo              
             `;
             const parametros = [termo];
             const [registros, campos] = await conexao.execute(sql, parametros);
+    
             for (const registro of registros) {
                 const marca = new Marca(registro.mar_codigo, registro.mar_descricao);
                 const veiculo = new Veiculo(registro.vei_codigo,
@@ -66,19 +79,18 @@ export default class VeiculoDAO {
                 );
                 listaVeiculos.push(veiculo);
             }
-        }
-        else {
-            //consulta pela descrição do veiculo
-            const sql = `SELECT v.vei_codigo,
-                v.vei_modelo, v.vei_ano, v.vei_km, v.vei_valor, 
-                v.vei_cor, m.mar_codigo, m.mar_descricao
+        } else {
+            // Consulta por descrição do veículo
+            const sql = `SELECT v.vei_codigo, v.vei_modelo, v.vei_ano,
+                v.vei_km, v.vei_valor, v.vei_cor, m.mar_codigo, m.mar_descricao
                 FROM veiculo v 
                 INNER JOIN marca m ON v.mar_codigo = m.mar_codigo
-                WHERE v.modelo like ?
-                ORDER BY v.vei_modelo               
+                WHERE v.vei_modelo LIKE ?
+                ORDER BY v.vei_modelo
             `;
             const parametros = ['%' + termo + '%'];
             const [registros, campos] = await conexao.execute(sql, parametros);
+    
             for (const registro of registros) {
                 const marca = new Marca(registro.mar_codigo, registro.mar_descricao);
                 const veiculo = new Veiculo(registro.vei_codigo,
@@ -88,7 +100,8 @@ export default class VeiculoDAO {
                 listaVeiculos.push(veiculo);
             }
         }
-
+    
         return listaVeiculos;
     }
+    
 } 

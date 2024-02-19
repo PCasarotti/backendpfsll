@@ -14,7 +14,7 @@ export default class VeiculoCtrl {
             const marca = dados.marca;
 
             if (modelo && ano && km >= 0 && valor >= 0 && cor && marca){
-                const veiculo = new Veiculo(0, "", modelo, ano, km, valor, cor, marca);
+                const veiculo = new Veiculo(0, modelo, ano, km, valor, cor, marca);
 
                 veiculo.gravar().then(() => {
                     resposta.status(200).json({

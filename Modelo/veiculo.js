@@ -93,7 +93,7 @@ export default class Veiculo {
         await veiculoDAO.excluir(this);
     }
 
-    async alterar() {
+    async atualizar() {
         const veiculoDAO = new VeiculoDAO();
         await veiculoDAO.atualizar(this);
     }
