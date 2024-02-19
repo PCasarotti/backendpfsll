@@ -8,7 +8,7 @@ export default async function conectar(){
         const pool = mysql.createPool({
             host: '129.146.68.51',
             user: 'aluno27-pfsii', 
-            password:'aluno27-pfsii',  
+            password:'',  
             database: 'backendaluno27pfsii',
             waitForConnections: true,
             connectionLimit: 10,
