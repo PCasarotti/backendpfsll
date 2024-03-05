@@ -1,4 +1,4 @@
-import { assinar, verificarAssinatura } from "./funcoesJWT";
+import { assinar, verificarAssinatura } from "./funcoesJWT.js";
 
 export function autenticar(requisicao, resposta){
     const usuario = requisicao.body.usuario;
@@ -32,3 +32,4 @@ export function verificarAcesso(requisicao, resposta, next){
         })
     }
 }
+export default autenticar;

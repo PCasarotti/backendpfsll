@@ -5,13 +5,12 @@ import rotaVeiculo from './Rotas/rotaVeiculo.js';
 import rotaLogin from './Rotas/rotaLogin.js';
 import dotenv from 'dotenv';
 import session from 'express-session';
+import { verificarAcesso } from './Seguranca/Autenticacao.js';
 
 const host = '0.0.0.0';
 const porta = '3000';
 
 dotenv.config();
-
-console.log(process.env);
 
 const app = express();
 
@@ -27,8 +26,8 @@ app.use(session({
 
 
 app.use('/login', rotaLogin)
-app.use('/marca', rotaMarca);
-app.use('/veiculo', rotaVeiculo); 
+app.use('/marca', verificarAcesso, rotaMarca);
+app.use('/veiculo', verificarAcesso, rotaVeiculo); 
 
 app.listen(porta, host, () => {
     console.log(`Servidor escutando na porta ${host}:${porta}.`);
