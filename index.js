@@ -21,7 +21,7 @@ app.use(session({
     secret: process.env.SEGREDO, 
     resave: false,
     saveUninitialized: true,
-    maxAge: 1000 * 60 * 6
+    maxAge: 1000 * 60 * 10
 }))
 
 

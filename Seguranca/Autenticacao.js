@@ -21,8 +21,12 @@ export function autenticar(requisicao, resposta){
 
 export function verificarAcesso(requisicao, resposta, next){
     const token = requisicao.headers['authorization'];
-    const tokenDecodificado = verificarAssinatura(token);
-    if (tokenDecodificado == requisicao.session.usuarioAutenticado){
+    let tokenDecodificado = '';
+    if(token){
+        tokenDecodificado = verificarAssinatura(token);
+    }
+    
+    if (tokenDecodificado.usuario.usuario == requisicao.session.usuarioAutenticado){
         next();
     }
     else{
