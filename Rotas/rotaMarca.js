@@ -6,7 +6,7 @@ const rotaMarca = new Router();
 
 rotaMarca
     .get('/', marcaCtrl.consultar)
-    .get('/:termo', marcaCtrl.consultar)
+    .get ('/:termo', marcaCtrl.consultar)
     .post('/', marcaCtrl.gravar)
     .patch('/', marcaCtrl.atualizar)
     .put('/', marcaCtrl.atualizar)
