@@ -34,13 +34,28 @@ export default class PedidoDAO {
     }
 
 
-    async excluir(pedido) {
-        if (pedido instanceof Pedido) {
-            const sql = "DELETE FROM pedido WHERE pedido_codigo = ?";
-            const parametros = [pedido.codigo];
+    async excluir(codigoPedido) {
+        try {
             const conexao = await conectar();
-            await conexao.execute(sql, parametros);
-            global.poolConexoes.releaseConnection(conexao);
+            const sqlExclusaoModelos = 'DELETE FROM pedido_modelo WHERE pedido_codigo = ?';
+            const sqlExclusaoPedido = 'DELETE FROM pedido WHERE codigo = ?';
+    
+            // Excluir modelos associados ao pedido
+            await conexao.execute(sqlExclusaoModelos, [codigoPedido]);
+    
+            // Excluir o próprio pedido
+            const [resultadoExclusao] = await conexao.execute(sqlExclusaoPedido, [codigoPedido]);
+    
+            if (resultadoExclusao.affectedRows > 0) {
+                console.log(`Pedido com código ${codigoPedido} excluído com sucesso.`);
+                return true;
+            } else {
+                console.log(`Pedido com código ${codigoPedido} não encontrado.`);
+                return false;
+            }
+        } catch (error) {
+            console.error(error);
+            return false;
         }
     }
     async atualizar(pedido) {
@@ -54,24 +69,25 @@ export default class PedidoDAO {
     }
     async consultar(termoBusca) {
         const listaPedidos = [];
-        if (!isNaN(termoBusca)) {
-            try {
-                const conexao = await conectar();
-                const sql = `SELECT p.codigo, p.cliente_codigo, p.data_pedido, p.modelo,
-                            c.nome, c.endereco, c.telefone,
-                            vei.vei_ano, vei.vei_cor, vei.vei_km, vei.vei_modelo, vei.vei_valor,
-                            mar.mar_codigo, mar.mar_descricao,
-                            mo.pedido_codigo, mo.quantidade, mo.km
-                            FROM pedido as p
-                            INNER JOIN cliente as c ON p.cliente_codigo = c.codigo
-                            INNER JOIN pedido_modelo as mo ON mo.pedido_codigo = p.codigo
-                            INNER JOIN veiculo as vei ON vei.vei_codigo = mo.vei_codigo
-                            INNER JOIN marca as mar ON vei.mar_codigo = mar.mar_codigo
-                            WHERE p.codigo = ?`;
-
-                const [registros, campos] = await conexao.execute(sql, [termoBusca]);
-
-                const cliente = new Cliente(registros[0].nome, registros[0].endereco, registros[0].telefone);
+    
+        try {
+            const conexao = await conectar();
+            const sql = `SELECT p.codigo, p.cliente_codigo, p.data_pedido, p.modelo,
+                        c.nome, c.endereco, c.telefone,
+                        vei.vei_ano, vei.vei_cor, vei.vei_km, vei.vei_modelo, vei.vei_valor,
+                        mar.mar_codigo, mar.mar_descricao,
+                        mo.pedido_codigo, mo.quantidade, mo.km
+                        FROM pedido as p
+                        INNER JOIN cliente as c ON p.cliente_codigo = c.codigo
+                        INNER JOIN pedido_modelo as mo ON mo.pedido_codigo = p.codigo
+                        INNER JOIN veiculo as vei ON vei.vei_codigo = mo.vei_codigo
+                        INNER JOIN marca as mar ON vei.mar_codigo = mar.mar_codigo
+                        WHERE p.codigo = ?`;
+    
+            const [registros, campos] = await conexao.execute(sql, [termoBusca]);
+    
+            if (registros.length > 0) {
+                const cliente = new Cliente(registros[0].cliente_codigo, registros[0].nome, registros[0].telefone, registros[0].endereco);
                 let listaModel = [];
                 for (const registro of registros) {
                     const marca = new Marca(registro.mar_codigo, registro.mar_descricao);
@@ -81,10 +97,12 @@ export default class PedidoDAO {
                 }
                 const pedido = new Pedido(registros[0].codigo, cliente, registros[0].data_pedido, registros[0].total, listaModel);
                 listaPedidos.push(pedido);
-            } catch (error) {
-                console.error(error);
             }
+        } catch (error) {
+            console.error(error);
         }
+    
         return listaPedidos;
     }
+    
 }
