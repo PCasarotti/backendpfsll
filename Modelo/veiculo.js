@@ -36,7 +36,7 @@ export default class Veiculo {
     get ano() {
         return this.#ano;
     }
-
+    
     set ano(novoAno) {
         this.#ano = novoAno;
     }
