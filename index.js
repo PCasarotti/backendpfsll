@@ -3,7 +3,6 @@ import cors from 'cors';
 import rotaMarca from './Rotas/rotaMarca.js';
 import rotaVeiculo from './Rotas/rotaVeiculo.js'; 
 import rotaLogin from './Rotas/rotaLogin.js';
-import rotaPedido from './Rotas/rotaPedido.js';
 import dotenv from 'dotenv';
 import session from 'express-session';
 import { verificarAcesso } from './Seguranca/Autenticacao.js';
@@ -29,7 +28,6 @@ app.use(session({
 app.use('/login', rotaLogin)
 app.use('/marca', verificarAcesso, rotaMarca);
 app.use('/veiculo', verificarAcesso, rotaVeiculo); 
-app.use('/pedido', rotaPedido);
 
 app.listen(porta, host, () => {
     console.log(`Servidor escutando na porta ${host}:${porta}.`);
